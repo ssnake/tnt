@@ -15,7 +15,7 @@ type
     procedure Image1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
-    { Private declarations }
+    procedure FinishIntro;
   public
     { Public declarations }
   end;
@@ -27,24 +27,29 @@ implementation
 
 {$R *.DFM}
 
+procedure TIntro.FinishIntro;
+begin
+  Timer1.Enabled := False;
+end;
+
 procedure TIntro.Timer1Timer(Sender: TObject);
 begin
-timer1.Enabled:=false;
+  FinishIntro;
 end;
 
 procedure TIntro.FormKeyPress(Sender: TObject; var Key: Char);
 begin
-timer1.Enabled:=false;
+  FinishIntro;
 end;
 
 procedure TIntro.Image1Click(Sender: TObject);
 begin
-timer1.Enabled:=false;
+  FinishIntro;
 end;
 
 procedure TIntro.FormCreate(Sender: TObject);
 begin
-Image1.Picture.LoadFromFile('Images\Bomber.JPG');
+  Image1.Picture.LoadFromFile('Images\Bomber.JPG');
 end;
 
 end.

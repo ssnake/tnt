@@ -15,16 +15,16 @@ type
     Pb4: TImage;
     Pb2: TImage;
 
-    procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X,Y: Integer);
+    procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
-    procedure frame1(var NumFr:Smallint;var fr:integer;fr_sp:integer);
-    procedure Rebuild(x1,y1:word);
-    procedure See(var res:boolean;x1,y1:integer);
-    procedure Dril(zader:shortint);
+    procedure frame1(var NumFr: Smallint; var fr: Integer; fr_sp: Integer);
+    procedure Rebuild(x1, y1: Word);
+    procedure See(var res: Boolean; x1, y1: Integer);
+    procedure Dril(zader: Shortint);
     procedure FormPaint(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure pesok_check(var result:boolean;x,y:integer);
+    procedure pesok_check(var result: Boolean; x, y: Integer);
     procedure bomb_explore;
     procedure ReDraw(x1,y1:integer);
     procedure Explr(x1,y1:integer;kind:string;frm:shortint);
@@ -155,34 +155,33 @@ uses Unit3;
 
 procedure TForm1.FormMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
-
 begin
+  if BufX - X >= MouseSpeed then
+  begin
+    Way[MousePlayer] := 'l';
+    BufX := X;
+  end;
 
-if bufX-X>=MouseSpeed then
-   begin;
-   way[MousePlayer]:='l';
-   bufx:=x;
-   end;
-if abs(X-BufX)>=MouseSpeed then
-   begin;
-   way[MousePlayer]:='r';
-   bufx:=x;
-   end;
+  if X - BufX >= MouseSpeed then
+  begin
+    Way[MousePlayer] := 'r';
+    BufX := X;
+  end;
 
-if bufY-Y>=MouseSpeed then
-   begin;
-   way[MousePlayer]:='u';
-   bufy:=y;
-   end;
-if abs(Y-bufY)>=MouseSpeed then
-   begin;
-   way[MousePlayer]:='d';
-   bufy:=y;
-   end;
+  if BufY - Y >= MouseSpeed then
+  begin
+    Way[MousePlayer] := 'u';
+    BufY := Y;
+  end;
 
+  if Y - BufY >= MouseSpeed then
+  begin
+    Way[MousePlayer] := 'd';
+    BufY := Y;
+  end;
 
-bufx:=x;
-bufy:=y;
+  BufX := X;
+  BufY := Y;
 
 end;
 
@@ -679,43 +678,43 @@ if NumberPlayer=numberofplayers+1 then NumberPlayer:=1;
 until NumberPlayer=1;
 end;
 
-procedure Tform1.frame1(var NumFr:Smallint;var fr:integer;fr_sp:integer);
-
-var a:real;
-    b:integer;
+procedure Tform1.frame1(var NumFr: Smallint; var fr: Integer; fr_sp: Integer);
+var
+  framePhase: Real;
+  frameIndex: Integer;
 begin
+  Inc(NumFr);
+  if NumFr = fr_sp * 3 + 1 then
+    NumFr := -(fr_sp * 4 - 1);
 
-inc(Numfr);
-if Numfr=fr_sp*3+1 then Numfr:=-(fr_sp*4-1);
-    //---\\
-    a:=int(Numfr/fr_sp);
-    b:=abs(round(a));
-    //---\\
-    fr:=b;
+  framePhase := Int(NumFr / fr_sp);
+  frameIndex := Abs(Round(framePhase));
+  fr := frameIndex;
 
 end;
 
 
 
-procedure Tform1.Rebuild(x1,y1:word);
-var a,b:shortint;
-
-
+procedure Tform1.Rebuild(x1, y1: Word);
+var
+  offsetX, offsetY: Shortint;
 begin
-for a:=0 to 3 do for b:=0 to 3 do {begin;}
- if (a<>1)or(b<>1) then ReDraw(x1+a-1,y1+b-1);
+  for offsetX := 0 to 3 do
+    for offsetY := 0 to 3 do
+      if (offsetX <> 1) or (offsetY <> 1) then
+        ReDraw(x1 + offsetX - 1, y1 + offsetY - 1);
 
 end;
 
 
 
 procedure TForm1.FormPaint(Sender: TObject);
-var a,b:word;
+var
+  tileX, tileY: Word;
 begin
-for a:=0 to lengthX do for b:=0 to lengthY do begin
-reDraw(a,b);
-end;
-
+  for tileX := 0 to LengthX do
+    for tileY := 0 to LengthY do
+      ReDraw(tileX, tileY);
 end;
 
 
@@ -804,12 +803,12 @@ main.RestoreDefaultMode;
 main.Close;
 end;
 
-procedure Tform1.pesok_check(var result:boolean;x,y:integer);
+procedure Tform1.pesok_check(var result: Boolean; x, y: Integer);
 begin
-case matrix[x,y].tip of
-  '[',']','p':result:=true;
-end;
-
+  case matrix[x, y].tip of
+    '[', ']', 'p':
+      result := True;
+  end;
 end;
 
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word;

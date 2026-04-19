@@ -38,25 +38,25 @@ type
     procedure N3Click(Sender: TObject);
     procedure N8Click(Sender: TObject);
     procedure N15Click(Sender: TObject);
-    procedure Load(name:string);
+    procedure Load(const levelName: string);
     procedure FormCreate(Sender: TObject);
     procedure N16Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
-    function SetFullscreenMode:Boolean;
+    function SetFullscreenMode: Boolean;
 
     { Private declarations }
   public
-  procedure RestoreDefaultMode;
+    procedure RestoreDefaultMode;
     { Public declarations }
   end;
 
 var
   Main: TMain;
-  Pn:1..4=1;
-  Str1:TStringStream;
-  for_doors:integer;
-  cl:string[1];
+  Pn: 1..4 = 1;
+  Str1: TStringStream;
+  for_doors: Integer;
+  cl: string[1];
 
 implementation
 
@@ -67,136 +67,159 @@ uses Unit1;
 
 procedure TMain.BitBtn1Click(Sender: TObject);
 begin
-load(opendialog1.FileName);
-Main.Visible:=false;
-if n16.Checked then SetFullscreenMode;
-form1.show;
+  Load(OpenDialog1.FileName);
+  Main.Visible := False;
+  if N16.Checked then
+    SetFullscreenMode;
+  Form1.Show;
 end;
 
 procedure TMain.N5Click(Sender: TObject);
 begin
-N5.Checked:=true;
-
+  N5.Checked := True;
 end;
 
 procedure TMain.N6Click(Sender: TObject);
 begin
-n6.Checked:=true;
-n5.Checked:=false;
-MousePlayer:=1;
+  N6.Checked := True;
+  N5.Checked := False;
+  MousePlayer := 1;
 end;
 
 procedure TMain.N3Click(Sender: TObject);
 begin
-Application.terminate;
+  Application.Terminate;
 end;
 
 procedure TMain.N8Click(Sender: TObject);
 begin
-MousePlayer:=2;
+  MousePlayer := 2;
 end;
 
 procedure TMain.N15Click(Sender: TObject);
 begin
-openDialog1.Filter:='TnT levels|*.TnT|All files|*.*';
-if opendialog1.Execute then Load(opendialog1.FileName);
-
+  OpenDialog1.Filter := 'TnT levels|*.TnT|All files|*.*';
+  if OpenDialog1.Execute then
+    Load(OpenDialog1.FileName);
 end;
-//----------
-procedure TMain.Load(name:string);
-var level:Textfile;
-    a,b,pesk:integer;
-    bufer:string;
+
+procedure TMain.Load(const levelName: string);
+var
+  levelFile: TextFile;
+  row, col: Integer;
+  randomVariant: Integer;
+  lineBuffer: string;
+  sourceLevelName: string;
+
+  procedure ApplyRandomSandTile;
+  begin
+    randomVariant := Random(5);
+    case randomVariant of
+      0, 1:
+        Matrix[col, row].tip := '[';
+      2, 3:
+        Matrix[col, row].tip := 'p';
+      4:
+        Matrix[col, row].tip := ']';
+    end;
+    Matrix[col, row].zizn := pesok_zizn;
+  end;
+
+  procedure ApplyRandomRockTile;
+  begin
+    randomVariant := Random(5);
+    case randomVariant of
+      0, 1:
+        Matrix[col, row].tip := 's';
+      2, 3:
+        Matrix[col, row].tip := 'q';
+      4:
+        Matrix[col, row].tip := 'e';
+    end;
+    Matrix[col, row].zizn := skala_zizn;
+  end;
 
 begin
-//for_doors:=-1;
-if name='' then name:='Default.TnT';
-randomize;
-assignFile(level,Name);
-reset(level);
-for a:=0 to LengthY do
+  sourceLevelName := levelName;
+  if sourceLevelName = '' then
+    sourceLevelName := 'Default.TnT';
+
+  Randomize;
+  AssignFile(levelFile, sourceLevelName);
+  Reset(levelFile);
+
+  for row := 0 to LengthY do
+  begin
+    ReadLn(levelFile, lineBuffer);
+    for col := 0 to LengthX do
     begin
-      readln(level,bufer);
-      for b:=0 to LengthX do
-        begin
-
-        matrix[b,a].tip:=bufer[b+1];
-        case bufer[b+1] of
-          'p':begin
-              pesk:=random(5);
-              case pesk of
-                0,1:matrix[b,a].tip:='[';
-                2,3:matrix[b,a].tip:='p';
-                4,5:matrix[b,a].tip:=']';
-              end;
-              matrix[b,a].zizn:=pesok_zizn;
-              end;
-          's':begin
-              pesk:=random(5);
-              case pesk of
-                0,1:matrix[b,a].tip:='s';
-                2,3:matrix[b,a].tip:='q';
-                4,5:matrix[b,a].tip:='e';
-              end;
-              matrix[b,a].zizn:=skala_zizn;
-              end;
-          'k':matrix[b,a].zizn:=kirpich_zizn;
-          'l':begin;
-              matrix[b,a].zizn:=kley_zizn;
-
-              end;
-          '0'..'9':begin;
-                         for_doors:=for_doors+1;
-                         doors[bufer[b+1]].x[for_doors]:=b;
-                         doors[bufer[b+1]].y[for_doors]:=a;
-                  end;
-        end;
-        end;
+      Matrix[col, row].tip := lineBuffer[col + 1];
+      case lineBuffer[col + 1] of
+        'p':
+          ApplyRandomSandTile;
+        's':
+          ApplyRandomRockTile;
+        'k':
+          Matrix[col, row].zizn := kirpich_zizn;
+        'l':
+          Matrix[col, row].zizn := kley_zizn;
+        '0'..'9':
+          begin
+            for_doors := for_doors + 1;
+            doors[lineBuffer[col + 1]].x[for_doors] := col;
+            doors[lineBuffer[col + 1]].y[for_doors] := row;
+          end;
+      end;
     end;
+  end;
 
-closefile(level);
-end;//--------
-
-
-
+  CloseFile(levelFile);
+end;
 
 procedure TMain.FormCreate(Sender: TObject);
 begin
-{if not SetPriorityClass(GetCurrentProcess,REALTIME_PRIORITY_CLASS) then
-   ShowMessage('Error setting priority class.');
-if not SetThreadPriority(GetCurrentThread,THREAD_PRIORITY_HIGHEST) then
-   ShowMessage('Error setting theard priority class.');}
-Fone.Picture.LoadFromFile('Images\fone.jpg');
+  {if not SetPriorityClass(GetCurrentProcess,REALTIME_PRIORITY_CLASS) then
+     ShowMessage('Error setting priority class.');
+  if not SetThreadPriority(GetCurrentThread,THREAD_PRIORITY_HIGHEST) then
+     ShowMessage('Error setting theard priority class.');}
+  Fone.Picture.LoadFromFile('Images\fone.jpg');
 end;
 
-function TMain.SetFullscreenMode:Boolean;
-var DeviceMode : TDevMode;
+function TMain.SetFullscreenMode: Boolean;
+var
+  DeviceMode: TDevMode;
 begin
-with DeviceMode do begin
-dmSize:=SizeOf(DeviceMode);
-dmBitsPerPel:=16;
-dmPelsWidth:=640;
-dmPelsHeight:=480;
-dmFields:=DM_BITSPERPEL or DM_PELSWIDTH or DM_PELSHEIGHT;
-result:=False;
-if ChangeDisplaySettings(DeviceMode,CDS_TEST or CDS_FULLSCREEN) <> DISP_CHANGE_SUCCESSFUL
-then Exit;
-Result:=ChangeDisplaySettings(DeviceMode,CDS_FULLSCREEN) = DISP_CHANGE_SUCCESSFUL;
-end;end;
-procedure TMain.RestoreDefaultMode;
-var T : TDevMode;// absolute 0;
-begin ChangeDisplaySettings(T,CDS_FULLSCREEN);
+  with DeviceMode do
+  begin
+    dmSize := SizeOf(DeviceMode);
+    dmBitsPerPel := 16;
+    dmPelsWidth := 640;
+    dmPelsHeight := 480;
+    dmFields := DM_BITSPERPEL or DM_PELSWIDTH or DM_PELSHEIGHT;
+
+    Result := False;
+    if ChangeDisplaySettings(DeviceMode, CDS_TEST or CDS_FULLSCREEN) <> DISP_CHANGE_SUCCESSFUL then
+      Exit;
+
+    Result := ChangeDisplaySettings(DeviceMode, CDS_FULLSCREEN) = DISP_CHANGE_SUCCESSFUL;
+  end;
 end;
 
+procedure TMain.RestoreDefaultMode;
+var
+  DefaultMode: TDevMode;
+begin
+  ChangeDisplaySettings(DefaultMode, CDS_FULLSCREEN);
+end;
 
 procedure TMain.N16Click(Sender: TObject);
 begin
-n16.Checked:=not(n16.Checked);
+  N16.Checked := not N16.Checked;
 end;
 
 procedure TMain.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-main.RestoreDefaultMode;
+  Main.RestoreDefaultMode;
 end;
 
 end.
