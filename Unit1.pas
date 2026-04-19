@@ -1,4 +1,4 @@
-unit Unit1;
+п»їunit Unit1;
 
 interface
 
@@ -43,14 +43,14 @@ type
     { Public declarations }
   end;
 const MouseSpeed=15;
-//      step=2;    //шаг передвижения героев
-     // fr_sp=4;   //интервал между смены кадров героя
-                 //всего кадров 4
-      tb=3; //время смены кадров у бомбы
-      ver_zrv=100;//вероятност зрыва бомбы
+//      step=2;    //С€Р°Рі РїРµСЂРµРґРІРёР¶РµРЅРёСЏ РіРµСЂРѕРµРІ
+     // fr_sp=4;   //РёРЅС‚РµСЂРІР°Р» РјРµР¶РґСѓ СЃРјРµРЅС‹ РєР°РґСЂРѕРІ РіРµСЂРѕСЏ
+                 //РІСЃРµРіРѕ РєР°РґСЂРѕРІ 4
+      tb=3; //РІСЂРµРјСЏ СЃРјРµРЅС‹ РєР°РґСЂРѕРІ Сѓ Р±РѕРјР±С‹
+      ver_zrv=100;//РІРµСЂРѕСЏС‚РЅРѕСЃС‚ Р·СЂС‹РІР° Р±РѕРјР±С‹
       smb_exp=149;
       b_exp=200;
-      lengthY=44;//64x45 стандарт MB
+      lengthY=44;//64x45 СЃС‚Р°РЅРґР°СЂС‚ MB
       lengthX=63;
       kirpich_zizn=450;
       pesok_zizn=100;
@@ -96,32 +96,32 @@ var
           server:boolean;
           end;
   MousePlayer:integer;
-  BufX,BufY:integer;         //переменные для мыши
-  Way,way_for_stop:array[1..4] of char;   //направление объекта
+  BufX,BufY:integer;         //РїРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ РјС‹С€Рё
+  Way,way_for_stop:array[1..4] of char;   //РЅР°РїСЂР°РІР»РµРЅРёРµ РѕР±СЉРµРєС‚Р°
   frm,dril_frm:array[1..4] of Smallint;
   Weapons:array[1..4,1..21] of record
                                kol:0..100;
                                kind:string;
                                end;
 
-  DeadMans:array[1..4] of record  //герои 0
+  DeadMans:array[1..4] of record  //РіРµСЂРѕРё 0
                           zizn:integer;
                           ver_zrv:0..100;
-                          fr:integer;   //номер кадра
-                          dril:integer;//мощность дрели
-                          left,right,up,down:frame; //Картинки для играков
+                          fr:integer;   //РЅРѕРјРµСЂ РєР°РґСЂР°
+                          dril:integer;//РјРѕС‰РЅРѕСЃС‚СЊ РґСЂРµР»Рё
+                          left,right,up,down:frame; //РљР°СЂС‚РёРЅРєРё РґР»СЏ РёРіСЂР°РєРѕРІ
                           ld,rd,ud,dd:array[0..1] of TBitmap;
                           end;
   doors:array['0'..'9']of record
                        x,y:array[0..100] of Shortint;
                        end;
-// типы квадратика
+// С‚РёРїС‹ РєРІР°РґСЂР°С‚РёРєР°
   MGrd,beton,kirpich,hkirpich,mkirpich,weapon,pesok,pesok2,pesok3,skala,skala2,skala3,hskala,mskala,krov,dveri,vikl1,vikl2,mine,block,kley:Tbitmap;
-  dit_sm_1,dit_sm_2,dit_sm_3,dit_lg_1,dit_lg_2,dit_lg_3:TBitmap; //дитонаторы
-// конец
-  x,y,step:array[1..4]of real;//integer;  //координаты каждого героя
-  Up,Down,lft,Right,Stoy,fire,detonate,select:array[1..4] of word; //клавиши героев
-  NumberBomb,NumberOfBombs:integer; //текущая бомба,кол. бомб
+  dit_sm_1,dit_sm_2,dit_sm_3,dit_lg_1,dit_lg_2,dit_lg_3:TBitmap; //РґРёС‚РѕРЅР°С‚РѕСЂС‹
+// РєРѕРЅРµС†
+  x,y,step:array[1..4]of real;//integer;  //РєРѕРѕСЂРґРёРЅР°С‚С‹ РєР°Р¶РґРѕРіРѕ РіРµСЂРѕСЏ
+  Up,Down,lft,Right,Stoy,fire,detonate,select:array[1..4] of word; //РєР»Р°РІРёС€Рё РіРµСЂРѕРµРІ
+  NumberBomb,NumberOfBombs:integer; //С‚РµРєСѓС‰Р°СЏ Р±РѕРјР±Р°,РєРѕР». Р±РѕРјР±
   Numweapons:array[1..4]of integer;
   smbomb_,bomb_,dinamit_:frame;
   lazer_:array[0..1] of Tbitmap;
@@ -143,7 +143,7 @@ var
 
 
   Matrix:array[0-7..lengthX+7,0-2..lengthY+2]of record
-    {    ^^^^ - уровень}                    tip:char;
+    {    ^^^^ - СѓСЂРѕРІРµРЅСЊ}                    tip:char;
                                             zizn:Smallint;
                                             end;
 implementation
@@ -197,7 +197,7 @@ if not SetThreadPriority(GetCurrentThread,THREAD_PRIORITY_TIME_CRITICAL) then
 //SetFullscreenMode;
 
 //-------------------------------------
-//игрок 1
+//РёРіСЂРѕРє 1
 step[1]:=1.8;
 
 weapons[1,1].kol:=10;
@@ -278,7 +278,7 @@ Deadmans[1].dd[1]:=TBitmap.Create;
 Deadmans[1].dd[1].LoadFromFile('Images\Heroes\player 1 n dr 2.bmp');
 
 
-//игрок 2
+//РёРіСЂРѕРє 2
 step[2]:=2.1;
 Deadmans[2].dril:=10;
 Deadmans[2].zizn:=150;
@@ -357,7 +357,7 @@ Deadmans[2].dd[1]:=TBitmap.Create;
 Deadmans[2].dd[1].LoadFromFile('Images\Heroes\player 2 n dr 2.bmp');
 
 
-//игрок 3
+//РёРіСЂРѕРє 3
 step[3]:=2;
 Deadmans[3].dril:=10;
 Deadmans[3].zizn:=150;
@@ -435,7 +435,7 @@ Deadmans[3].dd[1].LoadFromFile('Images\Heroes\player 3 n dr 2.bmp');
 
 
 
-//бомбы
+//Р±РѕРјР±С‹
 NumberOfBombs:=0;
 SetLength(bombs,NumberOfBombs+1);
 smbomb_[0]:=TBitmap.Create;
@@ -489,7 +489,7 @@ lazer_[0].LoadFromFile('Images\Bombs\lazer2.BMP');
 lazer_[1]:=TBitmap.Create;
 lazer_[1].LoadFromFile('Images\Bombs\lazer1.BMP');
 
-//взрывчики
+//РІР·СЂС‹РІС‡РёРєРё
 
 explore[0]:=TBitmap.Create;
 explore[0].LoadFromFile('Images\Bombs\expl1.BMP');
@@ -500,7 +500,7 @@ explore[2].LoadFromFile('Images\Bombs\expl3.BMP');
 
 
 
-// квадратики
+// РєРІР°РґСЂР°С‚РёРєРё
 MGrd:=TBitmap.Create;
 MGrd.LoadFromFile('Images\terrain\mgrd.bmp');
 Beton:=TBitmap.Create;
@@ -667,7 +667,7 @@ if round(Y[NumberPlayer]/10)>=LengthY then begin;Y[NumberPlayer]:=(round(Y[Numbe
 if round(X[NumberPlayer]/10)>=LengthX then begin;X[NumberPlayer]:=(round(x[NumberPlayer])div 10)*10;end;
 
 
-//оружие
+//РѕСЂСѓР¶РёРµ
 
 bomb_explore;
 //-----------------------------------------------------------------------------
@@ -723,31 +723,31 @@ procedure TForm1.See(var res:boolean;x1,y1:integer);
 var  a,b,c:integer;
 begin
 case matrix[X1,Y1].tip of
-  'k':begin{норм кирпич}
+  'k':begin{РЅРѕСЂРј РєРёСЂРїРёС‡}
       res:=false;
       matrix[x1,y1].zizn:=matrix[x1,y1].zizn-DeadMans[NumberPlayer].dril;dril(2);
       if matrix[x1,y1].zizn<=0 then
       begin res:=true;matrix[x1,y1].tip:='g';end;
       end;
-  'p','[',']':begin{песок}
+  'p','[',']':begin{РїРµСЃРѕРє}
       res:=false;
       matrix[x1,y1].zizn:=matrix[x1,y1].zizn-DeadMans[NumberPlayer].dril;
       if matrix[x1,y1].zizn<=0 then
       begin res:=true;matrix[x1,y1].tip:='g';end;
       end;
-  'm':begin{мина}
+  'm':begin{РјРёРЅР°}
       mine_exp(x1,y1);
       MessageBeep(0);
       res:=true;
       end;
-  'l' :begin{клей}
+  'l' :begin{РєР»РµР№}
       res:=false;
       matrix[x1,y1].zizn:=matrix[x1,y1].zizn-DeadMans[NumberPlayer].dril;//dril(2);
       if matrix[x1,y1].zizn<=0 then
       begin res:=true;matrix[x1,y1].tip:='g';end;
       end;
 
-   'L':begin{блок}
+   'L':begin{Р±Р»РѕРє}
       case way[NumberPlayer] of
        'u':if (matrix[x1,y1-1].tip='g')or(matrix[x1,y1-1].tip='K') then begin;matrix[x1,y1-1].tip:=matrix[X1,Y1].tip;matrix[x1,y1].tip:='g';redraw(x1,y1)end else begin;Way[NumberPlayer]:='s';res:=false;way_for_stop[NumberPlayer]:='u';end;
        'd':if (matrix[x1,y1+1].tip='g')or(matrix[x1,y1+1].tip='K') then begin;matrix[x1,y1+1].tip:=matrix[X1,Y1].tip;matrix[x1,y1].tip:='g';redraw(x1,y1)end else begin;Way[NumberPlayer]:='s';res:=false;way_for_stop[NumberPlayer]:='d';end;
@@ -767,7 +767,7 @@ case matrix[X1,Y1].tip of
                 end;REdraw(doors[chr(ord(matrix[X1,Y1].tip)+15)].x[b],doors[chr(ord(matrix[X1,Y1].tip)+15)].y[b]);
             end;
            end;
-  's','q','e':begin{скала}
+  's','q','e':begin{СЃРєР°Р»Р°}
       res:=false;
       matrix[x1,y1].zizn:=matrix[x1,y1].zizn-DeadMans[NumberPlayer].dril;dril(2);
       if matrix[x1,y1].zizn<=0 then
