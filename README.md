@@ -4,11 +4,14 @@
 
 Reference (Finnish): https://fi.wikipedia.org/wiki/Mine_Bombers
 
+
 ## About
 
 This is a classic Delphi game project (originally around 2000) that recreates the local multiplayer bomb-battle gameplay style of Mine Bombers.
 
 ## Gameplay
+
+![Gameplay](gameplay.png)
 
 - Local multiplayer on a single PC
 - Up to **3 players** sharing the same keyboard
